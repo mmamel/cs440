@@ -41,8 +41,15 @@ class LinearHash{
 		int bucket_cap = 5;
 		vector <Buckets> buckets;
 
-		string getHash(string id){
-			return bitset<32>(id).to_string();
+		//pass an int id to get a string in bit format
+		string getHash(int id){
+			string key = bitset<32>(id).to_string();
+			return key;
+		}
+		//give a full id and how many end bits you want 
+		string levelKey(string fullkey, int bit_ct){
+			int length = fullkey.length();
+			return fullkey.substr(length-bit_ct);
 		}
 
 	
@@ -52,7 +59,15 @@ class LinearHash{
 
 int main(int argc, char *argv[]){
 	LinearHash temp;
-	temp.getHash(124124);
+	//testing getHas
+	// string key = temp.getHash(100);
+	// cout << key<< endl;
+	// cout << key[0] << endl;
+
+	//testing levleKey
+	// cout << temp.levelKey(key, 4);
+
+	
 	//creation mode
 	// if (argv[1] == "C"){
 	// 	FILE * pFile;
