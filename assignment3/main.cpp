@@ -20,7 +20,7 @@ class Block{
 	public:
 		int block_number;
 		vector <Record> Primary;
-		vector <Record> Overflow;
+		vector <Record> *overflow_ptr=NULL;
 };
 
 
