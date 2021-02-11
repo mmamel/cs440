@@ -24,14 +24,14 @@ class Block{
 		vector <Record> *overflow_ptr=NULL;
 };
 
-class Bucket{
+class Buckets{
 	public:
 		Block* block;
 		int block_key0;
 		int block_key1 = NULL;
 		int h_level;
 
-}
+};
 
 
 class LinearHash{
@@ -41,12 +41,18 @@ class LinearHash{
 		int bucket_cap = 5;
 		vector <Buckets> buckets;
 
+		string getHash(string id){
+			return bitset<32>(id).to_string();
+		}
+
 	
 };
 
 
 
 int main(int argc, char *argv[]){
+	LinearHash temp;
+	temp.getHash(124124);
 	//creation mode
 	// if (argv[1] == "C"){
 	// 	FILE * pFile;
