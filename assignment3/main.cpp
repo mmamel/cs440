@@ -30,7 +30,7 @@ class LinearHash{
 		int num_entries = 0;
 		int num_buckets = 0;
 		int bucket_cap = 5;
-		// vector <Block*, > Buckets;
+		vector < pair <Block*, int> > Buckets;
 };
 
 
