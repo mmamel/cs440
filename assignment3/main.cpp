@@ -18,11 +18,20 @@ class Record{
 class Block{
 	// float size = 5;
 	public:
-		int block_number;
-		vector <Record> Primary;
+		int block_key0;
+		int block_key1 = NULL;
+		vector <Record> primary;
 		vector <Record> *overflow_ptr=NULL;
 };
 
+class Bucket{
+	public:
+		Block* block;
+		int block_key0;
+		int block_key1 = NULL;
+		int h_level;
+
+}
 
 
 class LinearHash{
@@ -30,7 +39,9 @@ class LinearHash{
 		int num_entries = 0;
 		int num_buckets = 0;
 		int bucket_cap = 5;
-		vector < pair <Block*, int> > Buckets;
+		vector <Buckets> buckets;
+
+	
 };
 
 
