@@ -30,7 +30,6 @@ class Bucket{
 		int block_key0;
 		int block_key1 = NULL;
 		int h_level;
-
 }
 
 
@@ -39,7 +38,7 @@ class LinearHash{
 		int num_entries = 0;
 		int num_buckets = 0;
 		int bucket_cap = 5;
-		vector <Buckets> buckets;
+		vector <Bucket> buckets;
 
 	
 };
