@@ -37,8 +37,8 @@ string levelKey(string fullkey, int bit_ct){
 }
 		
 
-bool CapOk(int num_rec, int N){
-	if( (float) num_rec / ((float) N) * 5.0 > 0.8){
+bool CapOk(int recordsCt, int blockCt, int emptyOverflowCt){
+	if( (float) recordsCt / (float) (blockCt - emptyOverflowCt) * 5.0 > 0.8){
 		return false;
 	}
 	else{
@@ -109,8 +109,11 @@ string readBlock(int offset){
 void createBucketArray(vector<vector<int>> &vect){
 	ifstream fp;
 	fp.open("bucket.txt");
-	int num_record = readNumber(fp);
+	int emptyOverflowCt = readNumber(fp);
+	int recordCt = readNumber(fp);
 	int N = readNumber(fp);
+	int blockCt = readNumber(fp);
+
 
 	//build the bucket array from getlining the rest of the file
 	for(int i = 0;i < N; i++){
@@ -157,63 +160,200 @@ void buildIndex(vector<string> &vect, int N){
 
 }
 
-void incrementRecordCt(){
-	ifstream ifile;
-	ofstream ofile;
-	ifile.open("bucket.txt");
-	// fstream file("bucket.txt", ios::out | ios::in);
-	string remade_str;
-	string str;
-	std::getline(ifile, str);
-	int ct = stoi(str);
-	ct++;
-	remade_str = std::to_string(ct);
-	remade_str += '\n';
-	while(std::getline(ifile, str)){
-		remade_str = remade_str + str+'\n';
-	}
+//AXE THIS
+// void incrementRecordCt(){
+// 	ifstream ifile;
+// 	ofstream ofile;
+// 	ifile.open("bucket.txt");
+// 	// fstream file("bucket.txt", ios::out | ios::in);
+// 	string remade_str;
+// 	string str;
+// 	std::getline(ifile, str);
+// 	int ct = stoi(str);
+// 	ct++;
+// 	remade_str = std::to_string(ct);
+// 	remade_str += '\n';
+// 	while(std::getline(ifile, str)){
+// 		remade_str = remade_str + str+'\n';
+// 	}
 
-	ifile.close();
-	ofile.open("bucket.txt");
+// 	ifile.close();
+// 	ofile.open("bucket.txt");
 
-	int string_length = remade_str.length();
-	char char_array[string_length+1];
-    strcpy(char_array, remade_str.c_str());
-    char_array[string_length] = 0;
-    ofile << remade_str;
-	ofile.close();
-}
-void incrementBucketCt(){
-	ifstream ifile;
-	ofstream ofile;
-	ifile.open("bucket.txt");
-	// fstream file("bucket.txt", ios::out | ios::in);
-	string remade_str;
-	string str;
-	std::getline(ifile, str);
-	remade_str = str + '\n';
-	std::getline(ifile, str);
-	int ct = stoi(str);
-	ct++;
-	str = std::to_string(ct);
-	remade_str += str + '\n';
-	while(std::getline(ifile, str)){
-		remade_str = remade_str + str+'\n';
-	}
-
-	ifile.close();
-	ofile.open("bucket.txt");
-
-	int string_length = remade_str.length();
-	char char_array[string_length+1];
-    strcpy(char_array, remade_str.c_str());
-    char_array[string_length] = 0;
-    ofile << remade_str;
-	ofile.close();
-}
-// void addOverflow(){
-
+// 	int string_length = remade_str.length();
+// 	char char_array[string_length+1];
+//     strcpy(char_array, remade_str.c_str());
+//     char_array[string_length] = 0;
+//     ofile << remade_str;
+// 	ofile.close();
 // }
+// void incrementBucketCt(){
+// 	ifstream ifile;
+// 	ofstream ofile;
+// 	ifile.open("bucket.txt");
+// 	// fstream file("bucket.txt", ios::out | ios::in);
+// 	string remade_str;
+// 	string str;
+// 	std::getline(ifile, str);
+// 	remade_str = str + '\n';
+// 	std::getline(ifile, str);
+// 	int ct = stoi(str);
+// 	ct++;
+// 	str = std::to_string(ct);
+// 	remade_str += str + '\n';
+// 	while(std::getline(ifile, str)){
+// 		remade_str = remade_str + str+'\n';
+// 	}
+
+// 	ifile.close();
+// 	ofile.open("bucket.txt");
+
+// 	int string_length = remade_str.length();
+// 	char char_array[string_length+1];
+//     strcpy(char_array, remade_str.c_str());
+//     char_array[string_length] = 0;
+//     ofile << remade_str;
+// 	ofile.close();
+// }
+void addBucket(){
+	ifstream ifile;
+	ofstream ofile;
+
+	ifile.open("bucket.txt");
+	string remade_str;
+	string str;
+
+	//grab meta data
+	int emptyOverflowCt = readNumber(ifile);
+	remade_str = std::to_string(emptyOverflowCt) + '\n';
+	int recordCt = readNumber(ifile);
+	remade_str += std::to_string(recordCt) + '\n';
+	int N = readNumber(ifile);
+	remade_str += std::to_string(N+1) + '\n';
+	int blockCt = readNumber(ifile);
+	remade_str += std::to_string(blockCt+1) + '\n';
+
+	//find the block
+	for(int i = 0;i < N; i++){
+		int offset = readNumber(ifile);
+		remade_str += std::to_string(offset) + '\n';
+		int overflow = readNumber(ifile);
+		remade_str += std::to_string(overflow) + '\n';
+		for(int j = 0;j < overflow;j++){
+			int overflow_offset = readNumber(ifile);
+			remade_str += std::to_string(overflow_offset) + '\n';
+		}
+	}
+
+	//add new block
+	remade_str += std::to_string(blockCt) + '\n' + '0'+'\n';
+
+	ifile.close();
+	ofile.open("bucket.txt");
+
+	int string_length = remade_str.length();
+	char char_array[string_length+1];
+    strcpy(char_array, remade_str.c_str());
+    char_array[string_length] = 0;
+    ofile << remade_str;
+	ofile.close();
+}
+//remember this functinos index is not 0 index, it starts at 1
+void addOverflow(int index){
+	ifstream ifile;
+	ofstream ofile;
+
+	ifile.open("bucket.txt");
+	string remade_str;
+	string str;
+
+	//grab meta data
+	int emptyOverflowCt = readNumber(ifile);
+	remade_str = std::to_string(emptyOverflowCt) + '\n';
+	int recordCt = readNumber(ifile);
+	remade_str += std::to_string(recordCt) + '\n';
+	int N = readNumber(ifile);
+	remade_str += std::to_string(N) + '\n';
+	int blockCt = readNumber(ifile);
+	remade_str += std::to_string(blockCt+1) + '\n';
+
+	//find the block
+	for(int i = 0;i < index; i++){
+		int offset = readNumber(ifile);
+		remade_str += std::to_string(offset) + '\n';
+		int overflow = readNumber(ifile);
+		remade_str += std::to_string(overflow+1) + '\n';
+		for(int j = 0;j < overflow;j++){
+			int overflow_offset = readNumber(ifile);
+			remade_str += std::to_string(overflow_offset) + '\n';
+		}
+	}
+	//add new overflow
+	remade_str += std::to_string(blockCt) + '\n';
+
+	//get rest of file
+	while(std::getline(ifile, str)){
+		remade_str = remade_str + str+'\n';
+	}
+
+	ifile.close();
+	ofile.open("bucket.txt");
+
+	int string_length = remade_str.length();
+	char char_array[string_length+1];
+    strcpy(char_array, remade_str.c_str());
+    char_array[string_length] = 0;
+    ofile << remade_str;
+	ofile.close();
+}
+void removeOverflow(int index, int lostRecordCt){
+	ifstream ifile;
+	ofstream ofile;
+
+	ifile.open("bucket.txt");
+	string remade_str;
+	string str;
+
+	//grab meta data
+	int emptyOverflowCt = readNumber(ifile);
+	remade_str = std::to_string(emptyOverflowCt+1) + '\n';
+	int recordCt = readNumber(ifile);
+	remade_str += std::to_string(recordCt-lostRecordCt) + '\n';
+	int N = readNumber(ifile);
+	remade_str += std::to_string(N) + '\n';
+	int blockCt = readNumber(ifile);
+	remade_str += std::to_string(blockCt)+'\n';
+
+	//find the block
+	for(int i = 0;i < index; i++){
+		int offset = readNumber(ifile);
+		remade_str += std::to_string(offset) + '\n';
+		int overflow = readNumber(ifile);
+		remade_str += std::to_string(overflow-1) + '\n';
+		for(int j = 0;j < overflow-1;j++){
+			int overflow_offset = readNumber(ifile);
+			remade_str += std::to_string(overflow_offset) + '\n';
+		}
+		//skip last block
+		int overflow_offset = readNumber(ifile);
+	}
+
+
+	//get rest of file
+	while(std::getline(ifile, str)){
+		remade_str = remade_str + str+'\n';
+	}
+
+	ifile.close();
+	ofile.open("bucket.txt");
+
+	int string_length = remade_str.length();
+	char char_array[string_length+1];
+    strcpy(char_array, remade_str.c_str());
+    char_array[string_length] = 0;
+    ofile << remade_str;
+	ofile.close();
+}
 // void removeOverflow(){
 
 // }
@@ -242,4 +382,7 @@ int main(int argc, char *argv[]){
 	cout << readBlock(0);
 	// incrementRecordCt();
 	// incrementBucketCt();
+	// addBucket();
+	// addOverflow(1);
+	removeOverflow(1,1);
 }
