@@ -211,6 +211,20 @@ void incrementBucketCt(){
     ofile << remade_str;
 	ofile.close();
 }
+// void addOverflow(){
+
+// }
+// void removeOverflow(){
+
+// }
+// //maybe 
+// //if you delete an voerflow then remake it, just add a new one, and leave the old one eempty
+// //this way the pointers will never change, just what is known to the 
+// //search program will guide to the right blocks
+// //deleting a overflow block means you cant decrement block count or else
+// void deleteOverflow(){
+
+// }
 int main(int argc, char *argv[]){
 	addBlock();
 	vector<string> index;
@@ -226,6 +240,6 @@ int main(int argc, char *argv[]){
 		// cout << index[i] << " ";
 	}
 	cout << readBlock(0);
-	incrementRecordCt();
-	incrementBucketCt();
+	// incrementRecordCt();
+	// incrementBucketCt();
 }
