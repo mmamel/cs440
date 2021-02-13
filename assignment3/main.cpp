@@ -37,8 +37,8 @@ string levelKey(string fullkey, int bit_ct){
 }
 		
 
-bool CapOk(int recordsCt, int blockCt, int emptyOverflowCt){
-	if( (float) recordsCt / (float) (blockCt - emptyOverflowCt) * 5.0 > 0.8){
+bool CapOk(int recordsCt, int blockCt){
+	if( (float) recordsCt / (float) (blockCt) * 5.0 > 0.8){
 		return false;
 	}
 	else{
@@ -314,7 +314,7 @@ void addOverflow(int index){
     ofile << remade_str;
 	ofile.close();
 }
-void removeOverflow(int index, int lostRecordCt){
+void removeOverflow(int index){
 	ifstream ifile;
 	ofstream ofile;
 
@@ -326,7 +326,7 @@ void removeOverflow(int index, int lostRecordCt){
 	int emptyOverflowCt = readNumber(ifile);
 	remade_str = std::to_string(emptyOverflowCt+1) + '\n';
 	int recordCt = readNumber(ifile);
-	remade_str += std::to_string(recordCt-lostRecordCt) + '\n';
+	remade_str += std::to_string(recordCt) + '\n';
 	int N = readNumber(ifile);
 	remade_str += std::to_string(N) + '\n';
 	int blockCt = readNumber(ifile);
@@ -403,5 +403,5 @@ int main(int argc, char *argv[]){
 	// incrementBucketCt();
 	addBucket();
 	addOverflow(1);
-	removeOverflow(1,1);
+	removeOverflow(1);
 }
