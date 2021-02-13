@@ -215,6 +215,14 @@ void buildIndex(vector<string> &vect, int N){
 //     ofile << remade_str;
 // 	ofile.close();
 // }
+int getN(){
+	ifstream ifile;
+	ifile.open("bucket.txt");
+	int emptyOverflowCt = readNumber(ifile);
+	int recordCt = readNumber(ifile);
+	int N = readNumber(ifile);
+	return N;
+}
 void addBucket(){
 	ifstream ifile;
 	ofstream ofile;
@@ -278,7 +286,7 @@ void addOverflow(int index){
 	remade_str += std::to_string(blockCt+1) + '\n';
 
 	//find the block
-	for(int i = 0;i < index; i++){
+	for(int i = -1;i < index-1; i++){
 		int offset = readNumber(ifile);
 		remade_str += std::to_string(offset) + '\n';
 		int overflow = readNumber(ifile);
@@ -325,7 +333,7 @@ void removeOverflow(int index, int lostRecordCt){
 	remade_str += std::to_string(blockCt)+'\n';
 
 	//find the block
-	for(int i = 0;i < index; i++){
+	for(int i = -1;i < index-1; i++){
 		int offset = readNumber(ifile);
 		remade_str += std::to_string(offset) + '\n';
 		int overflow = readNumber(ifile);
@@ -366,23 +374,34 @@ void removeOverflow(int index, int lostRecordCt){
 
 // }
 int main(int argc, char *argv[]){
-	addBlock();
+	// addBlock();
+
+	//base index
 	vector<string> index;
 	index.push_back("0");
 	index.push_back("1");
+
+	//grab the entire strcuture of the current hash table
 	vector<vector<int>> bucketArray;
 	createBucketArray(bucketArray);
 	printBucketArray(bucketArray);
-	buildIndex(index, 7);
-	for(int i=0;i<index.size();i++){
+
+	//grab how many buckets we currently have in bucketArray to build
+	// N sized index with binary keys eg. '00,01,10,11'
+	int N = getN();
+	buildIndex(index, N);
+
+	//next parse through build index to match
+
+	// for(int i=0;i<index.size();i++){
 	
 
-		// cout << index[i] << " ";
-	}
+	// 	// cout << index[i] << " ";
+	// }
 	cout << readBlock(0);
 	// incrementRecordCt();
 	// incrementBucketCt();
-	// addBucket();
-	// addOverflow(1);
+	addBucket();
+	addOverflow(1);
 	removeOverflow(1,1);
 }
