@@ -109,11 +109,11 @@ string readBlock(int offset){
 void createBucketArray(vector<vector<int>> &vect){
 	ifstream fp;
 	fp.open("bucket.txt");
+	vect.clear();
 	int emptyOverflowCt = readNumber(fp);
 	int recordCt = readNumber(fp);
 	int N = readNumber(fp);
 	int blockCt = readNumber(fp);
-
 
 	//build the bucket array from getlining the rest of the file
 	for(int i = 0;i < N; i++){
@@ -124,6 +124,7 @@ void createBucketArray(vector<vector<int>> &vect){
 		vector<int> temp;
 		temp.push_back(offset);
 		vect.push_back(temp);
+		cout << "working" << endl;
 
 		//get overflow offsets
 		for(int j = 0;j < overflow;j++){
@@ -293,11 +294,16 @@ void addOverflow(int index){
 	remade_str += std::to_string(blockCt+1) + '\n';
 
 	//find the block
-	for(int i = -1;i < index-1; i++){
+	for(int i = -1;i < index; i++){
 		int offset = readNumber(ifile);
 		remade_str += std::to_string(offset) + '\n';
 		int overflow = readNumber(ifile);
-		remade_str += std::to_string(overflow+1) + '\n';
+		if(i == index-1){
+			remade_str += std::to_string(overflow+1) + '\n';
+		}
+		else{
+			remade_str += std::to_string(overflow) + '\n';
+		}
 		for(int j = 0;j < overflow;j++){
 			int overflow_offset = readNumber(ifile);
 			remade_str += std::to_string(overflow_offset) + '\n';
@@ -340,11 +346,17 @@ void removeOverflow(int index){
 	remade_str += std::to_string(blockCt)+'\n';
 
 	//find the block
-	for(int i = -1;i < index-1; i++){
+	for(int i = -1;i < index; i++){
 		int offset = readNumber(ifile);
 		remade_str += std::to_string(offset) + '\n';
 		int overflow = readNumber(ifile);
-		remade_str += std::to_string(overflow-1) + '\n';
+		if(i == index-1){
+			remade_str += std::to_string(overflow-1) + '\n';
+		}
+		else{
+			remade_str += std::to_string(overflow) + '\n';
+		}
+		remade_str += std::to_string(overflow) + '\n';
 		for(int j = 0;j < overflow-1;j++){
 			int overflow_offset = readNumber(ifile);
 			remade_str += std::to_string(overflow_offset) + '\n';
@@ -390,6 +402,7 @@ int main(int argc, char *argv[]){
 
 	//grab the entire strcuture of the current hash table
 	vector<vector<int>> bucketArray;
+
 	createBucketArray(bucketArray);
 	printBucketArray(bucketArray);
 
@@ -398,6 +411,8 @@ int main(int argc, char *argv[]){
 	int N = getN();
 	buildIndex(index, N);
 
+	cout << endl << "this is updated bucketarray" << endl;
+
 	//next parse through build index to match
 
 	// for(int i=0;i<index.size();i++){
@@ -405,11 +420,13 @@ int main(int argc, char *argv[]){
 
 	// 	// cout << index[i] << " ";
 	// }
-	cout << readBlock(0);
+	// cout << readBlock(0);
 	// incrementRecordCt();
 	// incrementBucketCt();
 	// addBucket();
-	// addOverflow(1);
+	addOverflow(1);
+	createBucketArray(bucketArray);
+	printBucketArray(bucketArray);
 	// removeOverflow(1);
-	incrementRecordCt();
+	// incrementRecordCt();
 }
