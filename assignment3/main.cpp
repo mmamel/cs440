@@ -6,6 +6,8 @@
 #include <unordered_map>
 #include <fstream>
 #include <cstring>
+#include <cmath>
+#include<bits/stdc++.h>
 
 using namespace std;
 
@@ -71,6 +73,14 @@ int readNumber(ifstream &fp){
 	std::getline(fp, str);
 	return stoi(str);
 }
+int getN(){
+	ifstream ifile;
+	ifile.open("bucket.txt");
+	int emptyOverflowCt = readNumber(ifile);
+	int recordCt = readNumber(ifile);
+	int N = readNumber(ifile);
+	return N;
+}
 string readBlock(int offset){
 	ifstream fp;
 	fp.open("test.txt");
@@ -124,7 +134,6 @@ void createBucketArray(vector<vector<int>> &vect){
 		vector<int> temp;
 		temp.push_back(offset);
 		vect.push_back(temp);
-		cout << "working" << endl;
 
 		//get overflow offsets
 		for(int j = 0;j < overflow;j++){
@@ -143,7 +152,11 @@ void printBucketArray(vector<vector<int>> vect){
 	}
 }
 //make sure you grab the size of the key and check those last bits to the original search.
-void buildIndex(vector<string> &vect, int N){
+void buildIndex(vector<string> &vect){
+	vect.clear();
+	vect.push_back("0");
+	vect.push_back("1");
+	int N = getN();
 	int Next = 0;
 	int total = 2;
 	for(int i=0; i< N-2;i++){
@@ -160,6 +173,7 @@ void buildIndex(vector<string> &vect, int N){
 	}
 
 }
+
 
 void incrementRecordCt(){
 	ifstream ifile;
@@ -223,14 +237,7 @@ void incrementRecordCt(){
 //     ofile << remade_str;
 // 	ofile.close();
 // }
-int getN(){
-	ifstream ifile;
-	ifile.open("bucket.txt");
-	int emptyOverflowCt = readNumber(ifile);
-	int recordCt = readNumber(ifile);
-	int N = readNumber(ifile);
-	return N;
-}
+
 void addBucket(){
 	ifstream ifile;
 	ofstream ofile;
@@ -392,26 +399,44 @@ void removeOverflow(int index){
 // void deleteOverflow(){
 
 // }
+
+int getNextIndex(vector<string> vect){
+	int N = getN();
+	int log = std::log(N)/std::log(2);
+	cout << "this is log" << log << endl;
+	//means we have finished a cycle
+	if (ceil(log2(N)) == floor(log2(N))){
+		return 0;
+	}
+	else{
+		int level = vect.at(0).size();
+		for(int i = 0;i< log *2; i++){
+			if(vect.at(i).size() == level-1){
+				return i;
+			}
+		}
+	}
+
+}
+
 int main(int argc, char *argv[]){
 	// addBlock();
 
 	//base index
 	vector<string> index;
-	index.push_back("0");
-	index.push_back("1");
+	
 
 	//grab the entire strcuture of the current hash table
-	vector<vector<int>> bucketArray;
+	// vector<vector<int>> bucketArray;
 
-	createBucketArray(bucketArray);
-	printBucketArray(bucketArray);
+	// createBucketArray(bucketArray);
+	// printBucketArray(bucketArray);
 
 	//grab how many buckets we currently have in bucketArray to build
 	// N sized index with binary keys eg. '00,01,10,11'
 	int N = getN();
-	buildIndex(index, N);
 
-	cout << endl << "this is updated bucketarray" << endl;
+
 
 	//next parse through build index to match
 
@@ -424,9 +449,9 @@ int main(int argc, char *argv[]){
 	// incrementRecordCt();
 	// incrementBucketCt();
 	// addBucket();
-	addOverflow(1);
-	createBucketArray(bucketArray);
-	printBucketArray(bucketArray);
+	// addOverflow(1);
+	// createBucketArray(bucketArray);
+	// printBucketArray(bucketArray);
 	// removeOverflow(1);
 	// incrementRecordCt();
 }
