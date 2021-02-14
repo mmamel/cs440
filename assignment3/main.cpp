@@ -363,13 +363,16 @@ void removeOverflow(int index){
 		else{
 			remade_str += std::to_string(overflow) + '\n';
 		}
-		remade_str += std::to_string(overflow) + '\n';
+		// remade_str += std::to_string(overflow) + '\n';
 		for(int j = 0;j < overflow-1;j++){
 			int overflow_offset = readNumber(ifile);
 			remade_str += std::to_string(overflow_offset) + '\n';
 		}
+		if(i==index-1){
 		//skip last block
 		int overflow_offset = readNumber(ifile);
+		}
+		
 	}
 
 
@@ -452,6 +455,6 @@ int main(int argc, char *argv[]){
 	// addOverflow(1);
 	// createBucketArray(bucketArray);
 	// printBucketArray(bucketArray);
-	// removeOverflow(1);
+	removeOverflow(1);
 	// incrementRecordCt();
 }
