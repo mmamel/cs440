@@ -1,3 +1,6 @@
+During our development we experienced power outage so we could not complete it before Saturday night.
+
+
 bucket.txt contains the structure of the Linear Hash table i.e. metadata and where each block
 exists (the "pointer") in EmployeeIndex.
 EmployeeIndex contains all blocks.
@@ -25,6 +28,12 @@ E.X. this is the starting linear hash with i=1 so there is only bucket '0' and b
 1 (Location of bucket '1')
 0 (No overflow)
 
+Execution (runs on c++11)
+g++ -std=c++11 finaldraft.cpp
+a.out C
+or
+a.out L (id) 
+**check notes on id
 
 **Notes** 
 Bit flipping is not required for this because the bucket will always grow the same way
@@ -35,3 +44,7 @@ hash value
 
 When we remove an overflow during redistribution, the actual block in EmployeeIndex is not removed. Instead, the offset value is removed from bucket.txt so that you will never read that
 block again. All the records are distributed normally.
+
+ID values cannot be bigger than what can be represtend by a long variable
+
+
