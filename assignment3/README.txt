@@ -47,4 +47,14 @@ block again. All the records are distributed normally.
 
 ID values cannot be bigger than what can be represtend by a long variable
 
+If you want to rebuild a new linear hash table you must reset the bucket.txt back to its starting form i.e.
+0
+0
+2
+2
+0
+0
+1
+0
+
 
