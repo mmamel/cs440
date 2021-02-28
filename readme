@@ -1,0 +1,6 @@
+the function merge handles removing the first element (i.e. smallest element) and grabbing the next block from appropriate file.
+Pass 0 if smallest element is in emprun and 1 for dept run
+all records are stored in the emprun and dept run vectors
+Make sure you resort the vectors after calling merge
+
+**NOte** dont know what ahpepns when you run out of records to pull 
